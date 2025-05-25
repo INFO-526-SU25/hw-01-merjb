@@ -1,9 +1,13 @@
 ---
 title: "HW 01"
-author: "INSERT YOUR NAME HERE"
+author: "Meredith Jean-Baptiste"
 format: 
   html:
     embed-resources: true
+execute: 
+  warning: false
+  message: false
+  error: false
 toc: true
 ---
 
@@ -22,16 +26,185 @@ devtools::install_github("tidyverse/dsbox")
 ## 1 - Road traffic accidents in Edinburgh
 
 ```{r label-me-1}
+# load packages
+library(tidyverse)
+library(here)
+library(countdown)
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
+
+#load the dataset
+accidents <- read_csv("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/accidents.csv")
+
+#mutate day_of_the_week to weekend/ weekday
+accidents_wrangle <- accidents |>
+  mutate(
+    weekend = day_of_week == "Saturday", "Sunday") |>
+  mutate(
+    weekday = day_of_week == "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+    )|>
+mutate(
+    slight  = severity == "Slight",
+    severe = severity == "Severe",
+    fatal = severity == "Fatal"
+    )
+  
+# Make plot
+accidents_wrangle |>
+  ggplot(aes(time,fill = severity))+
+  geom_density(alpha = 0.5)+
+  theme_light()+
+  scale_fill_manual(values = c("purple","deepskyblue3","yellow")) +
+   labs(
+    x = "Time of day",
+    y = "Density",
+     title = "Number of accidents throughout the day",
+    subtitle = "By day of week and severity",
+    caption = "Source: Road traffic accidents in Edinburgh, 2018,\n R Programming 101: Create a boxplot using R programming with the ggplot package")
 
 ```
 
 ## 2 - NYC marathon winners
 
 ```{r label-me-2}
+# load packages
+library(tidyverse)
+library(here)
+library(countdown)
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
+
+# load the dataset
+nyc_marathon <- read_csv("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/nyc_marathon.csv")
+
+# a. Histogram
+nyc_marathon|>
+  drop_na(time_hrs) |>
+  ggplot(aes(time_hrs)) +
+  geom_histogram(binwidth = 0.02, fill = "cornsilk4")+
+  theme_minimal()+
+  labs(
+    x = "Times",
+    y = NULL,
+     title = "NYC Marathon Winners 1970 - 2020",
+    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html")
+
+# This histogram is skewed to the right. There appear to be two peaks of times and the data is not normally distributed.
+
+# a. Boxplot
+nyc_marathon|>
+  drop_na(time_hrs) |>
+  ggplot(aes(,time_hrs)) +
+  geom_boxplot() +
+  theme_classic() +
+  stat_boxplot(geom = 'errorbar', width = 0.2)+
+  labs(
+    title = "NYC Marathon Winners 1970 - 2020",
+    x = NULL,
+    y = "Times",
+    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html")
+# The median for this boxplot is ~2.40 hrs, with the 25%ile at ~2.15 hrs and the 75%ile at ~2.48 hrs and some outliers at over 2.85hrs and >3hrs. We cannot observe this level of data in the histogram.
+
+# b. Boxplot by Gender
+nyc_marathon|>
+  drop_na(time_hrs) |>
+  ggplot(aes(division, time_hrs, fill = division)) +
+  geom_boxplot() +
+  theme_classic() +
+  scale_fill_manual(values = c("cornsilk4","deepskyblue3")) +
+  stat_boxplot(geom = 'errorbar', width = 0.2)+
+  labs(
+    y = "Times",
+    x = "Division",
+    title = "NYC Marathon Winners 1970 - 2020",
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+   theme(
+    legend.position = c(0.9, 0.9),
+    legend.box.background = element_rect(fill = "white",
+                                         color = "white"),
+  )
+# This boxplot is now much more clear in terms of race times by gender. It is clear that the marathon times differ between Men and Women.
+
+# c. Boxplot updated
+nyc_marathon|>
+  drop_na(time_hrs) |>
+  ggplot(aes(division, time_hrs, fill = division)) +
+  geom_boxplot() +
+  coord_flip()+
+  theme_classic() +
+  scale_fill_manual(values = c("cornsilk4","deepskyblue3")) +
+  stat_boxplot(geom = 'errorbar', width = 0.2)+
+  labs(
+    y = "Times",
+    x = "Division",
+    title = "NYC Marathon Winners 1970 - 2020",
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+   theme(
+    legend.position = c(0.9, 0.9),
+    legend.box.background = element_rect(fill = "white",
+                                         color = "white"),
+  )
+
+#There was not much redundancy in this second iteration of the boxplot, however to update change the data to ink ratio, if we look at the data vertically, it becomes easier to read.
+
+# d. Marathon times over the years by gender
+nyc_marathon|>
+  drop_na(time_hrs) |>
+  ggplot(aes(year, time_hrs, color = division)) +
+  geom_point(show.legend = FALSE) +
+  geom_line(linewidth = 1) +
+  theme_classic() +
+  scale_color_manual(values = c("cornsilk4","deepskyblue3")) +
+  labs(
+    y = "Time",
+    x = "Year",
+    title = "NYC Marathon Winners 1970 - 2020",
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+  theme(
+    legend.position = c(0.9, 0.9),
+    legend.box.background = element_rect(fill = "white",
+                                         color = "white"),
+  )
+# In this line graph, we see that over the years, both men and women have gotten faster, however it is clear that Men run faster times than women and that the lines never cross nor overlap. Additionally we see that in 2020, the marathon time was slower than the past 4 decades, likely due to the virtual events held due to the Covid-19 pandemic.
 
 ```
 
 ## 3 - US counties
+
+```{r}
+#Source: R/data-county.R
+#ggplot(county) +
+ # geom_point(aes(x = median_edu, y = median_hh_income)) +
+  #geom_boxplot(aes(x = smoking_ban, y = pop2017))
+
+
+```
 
 ## 4 - Rental apartments in SF
 
