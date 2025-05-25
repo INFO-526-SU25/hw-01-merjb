@@ -240,20 +240,23 @@ knitr::opts_chunk$set(
  credit <- read_csv("data/credit.csv")
 # make the comparison plot
  credit |>
-   #group_by(married) |>
+   #group_by (married, student)|>
+   #filter(student %in% c("Student: No",
+                         #"Student: Yes" |>
    ggplot(aes(x = income, 
               y = balance, 
               color = student,
               shape = student))+
-   geom_point(size = 2, alpha = 0.8)+
-   geom_smooth(method = "lm", se = FALSE, size = 0.7)+
-   scale_y_continuous()+
-   scale_x_continuous()+
+   geom_point(size = 2, alpha = 0.4, show.legend = FALSE)+
+   geom_smooth(method = "lm", se = FALSE, size = 0.8)+
+  #scale_y_continuous(labels = label_dollar(big.mark = ",")) +
+  #scale_x_continuous(labels = label_dollar(suffix = "K")) +
    facet_grid(student~married)+
+   scale_color_manual(values = c("blue","red")) +
    labs(x = "Income",
         y = "Credit card balance", 
         caption = "R Programming 101: Advanced ggplot - using facets")+
-   theme_classic()
+   theme_bw()
   
 
  
