@@ -25,7 +25,7 @@ devtools::install_github("tidyverse/dsbox")
 
 ## 1 - Road traffic accidents in Edinburgh
 
-```{r label-me-1}
+```{r Road traffic accidents in Edinburgh_Question-1}
 # load packages
 library(tidyverse)
 library(here)
@@ -49,7 +49,7 @@ knitr::opts_chunk$set(
 #load the dataset
 accidents <- read_csv("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/accidents.csv")
 
-#mutate day_of_the_week to weekend/ weekday
+#mutate day_of_the_week to weekend/ weekday: NOTE: none of these mutates worked as hoped for
 accidents_wrangle <- accidents |>
   mutate(
     weekend = day_of_week == "Saturday", "Sunday") |>
@@ -79,7 +79,7 @@ accidents_wrangle |>
 
 ## 2 - NYC marathon winners
 
-```{r label-me-2}
+```{r NYC Marathon winners_Question-2}
 # load packages
 library(tidyverse)
 library(here)
@@ -113,7 +113,7 @@ nyc_marathon|>
     x = "Times",
     y = NULL,
      title = "NYC Marathon Winners 1970 - 2020",
-    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html")
+    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html\nR Programming 101")
 
 # This histogram is skewed to the right. There appear to be two peaks of times and the data is not normally distributed.
 
@@ -128,7 +128,7 @@ nyc_marathon|>
     title = "NYC Marathon Winners 1970 - 2020",
     x = NULL,
     y = "Times",
-    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html")
+    caption = "Source: OpenIntro 25.0 https://openintrostat.github.io/openintro/reference/nyc_marathon.html\nR Programming 101: Create a boxplot using R programming with the ggplot package")
 # The median for this boxplot is ~2.40 hrs, with the 25%ile at ~2.15 hrs and the 75%ile at ~2.48 hrs and some outliers at over 2.85hrs and >3hrs. We cannot observe this level of data in the histogram.
 
 # b. Boxplot by Gender
@@ -143,7 +143,7 @@ nyc_marathon|>
     y = "Times",
     x = "Division",
     title = "NYC Marathon Winners 1970 - 2020",
-    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html\nR Programming 101: Create a boxplot using R programming with the ggplot package")+
    theme(
     legend.position = c(0.9, 0.9),
     legend.box.background = element_rect(fill = "white",
@@ -164,7 +164,7 @@ nyc_marathon|>
     y = "Times",
     x = "Division",
     title = "NYC Marathon Winners 1970 - 2020",
-    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html\nR Programming 101: Create a boxplot using R programming with the ggplot package")+
    theme(
     legend.position = c(0.9, 0.9),
     legend.box.background = element_rect(fill = "white",
@@ -185,7 +185,7 @@ nyc_marathon|>
     y = "Time",
     x = "Year",
     title = "NYC Marathon Winners 1970 - 2020",
-    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html")+
+    caption = "Source: OpenIntro 25.0 \nhttps://openintrostat.github.io/openintro/reference/nyc_marathon.html\nR Programming 101: Create a boxplot using R programming with the ggplot package")+
   theme(
     legend.position = c(0.9, 0.9),
     legend.box.background = element_rect(fill = "white",
@@ -197,7 +197,7 @@ nyc_marathon|>
 
 ## 3 - US counties
 
-```{r}
+```{r US counties_Question-3}
 #Source: R/data-county.R
 #ggplot(county) +
  # geom_point(aes(x = median_edu, y = median_hh_income)) +
@@ -208,4 +208,60 @@ nyc_marathon|>
 
 ## 4 - Rental apartments in SF
 
+```{r Rental apartments SF_Question-4}
+#setup
+if (!require("pacman")) 
+  install.packages("pacman")
+
+# use this line for installing/loading
+#pacman::p_load() 
+#load the library 
+library(readr)
+library(tidyverse)
+library(here)
+library(countdown)
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
+
+# load the dataset
+ credit <- read_csv("data/credit.csv")
+# make the comparison plot
+ credit |>
+   #group_by(married) |>
+   ggplot(aes(x = income, 
+              y = balance, 
+              color = student,
+              shape = student))+
+   geom_point(size = 2, alpha = 0.8)+
+   geom_smooth(method = "lm", se = FALSE, size = 0.7)+
+   scale_y_continuous()+
+   scale_x_continuous()+
+   facet_grid(student~married)+
+   labs(x = "Income",
+        y = "Credit card balance", 
+        caption = "R Programming 101: Advanced ggplot - using facets")+
+   theme_classic()
+  
+
+ 
+ 
+```
+
 ## 5 - Napoleon’s march.
+
+```{r Napoleons march_Question-5}
+
+```
