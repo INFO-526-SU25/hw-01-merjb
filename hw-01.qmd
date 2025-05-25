@@ -50,23 +50,18 @@ knitr::opts_chunk$set(
 accidents <- read_csv("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/accidents.csv")
 
 #mutate day_of_the_week to weekend/ weekday: NOTE: none of these mutates worked as hoped for
-accidents_wrangle <- accidents |>
-  mutate(
-    weekend = day_of_week == "Saturday", "Sunday") |>
-  mutate(
-    weekday = day_of_week == "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
-    )|>
-mutate(
-    slight  = severity == "Slight",
-    severe = severity == "Severe",
-    fatal = severity == "Fatal"
-    )
+#accidents_wrangle <- accidents |>
+  #mutate(weekend = day_of_week == "Saturday", "Sunday") |>
+  #mutate(weekday = day_of_week == "Monday", "Tuesday", "Wednesday", "Thursday", #"Friday")|>
+ # mutate(day_week = if_else(day_of_week == "Saturday" | "Sunday", "Weekend", #"Weekday"))
+
   
 # Make plot
 accidents_wrangle |>
   ggplot(aes(time,fill = severity))+
   geom_density(alpha = 0.5)+
   theme_light()+
+  #facet_wrap(day_week)+
   scale_fill_manual(values = c("purple","deepskyblue3","yellow")) +
    labs(
     x = "Time of day",
@@ -199,9 +194,97 @@ nyc_marathon|>
 
 ```{r US counties_Question-3}
 #Source: R/data-county.R
+
+#a.The following code [below] does not make sense for the median of the boxplots. If we plotted on the x-axis, the median education on top of the boxplot of the smoking ban, by the median household income on the y-axis,  this would not make sense for the smoking compared to the population as depicted in the boxplot.
 #ggplot(county) +
  # geom_point(aes(x = median_edu, y = median_hh_income)) +
   #geom_boxplot(aes(x = smoking_ban, y = pop2017))
+
+
+#b. The second plot of the " facet_grid (.~median_edu) " is easier to read as the data is stacked side by side, making the labels easier to read and the homeownership x poverty for each category of ecuation far cleaner.
+
+#c. 
+#Plot A: 
+#ggplot(county) +
+ # geom_point(aes(x = homownership, y = poverty))
+#  scale_color_manual(values = c("black")) +
+#  labs(x = "homeownership",
+#        y = "poverty", 
+#        title = "Plot A")+
+#  theme_minimal()
+
+#Plot B:
+#ggplot(county) +
+# geom_point(aes(x = homownership, y = poverty))
+#  scale_color_manual(values = c("black")) +
+#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue")+
+#  labs(x = "homeownership",
+#        y = "poverty", 
+#        title = "Plot B")+
+#  theme_minimal()
+
+#Plot C:
+#ggplot(county) +
+# geom_point(aes(x = homownership, y = poverty))
+#  scale_color_manual(values = c("black")) +
+#  geom_smooth(method = "mean", se = FALSE, size = 0.8, color = "green", line = metro)+
+#  labs(x = "homeownership",
+#        y = "poverty", 
+#        title = "Plot B")+
+#  theme_minimal()
+
+#Plot D:
+#ggplot(county) +
+# geom_point(aes(x = homownership, y = poverty))
+#  scale_color_manual(values = c("black")) +
+#  geom_smooth(method = "mean", se = FALSE, size = 0.8, color = "blue", line = metro)+
+#  labs(x = "homeownership",
+#        y = "poverty", 
+#        title = "Plot B")+
+#  theme_minimal()
+
+#Plot E:
+#ggplot(county) +
+#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
+#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue", linetype = metro)+
+#  scale_color_manual(values = c("deepskyblue","salmon")) +
+#  labs(x = "homownership",
+#        y = "poverty", 
+#        title = "Plot F")+
+#  theme_minimal()
+
+#Plot F:
+#ggplot(county) +
+#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
+#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = metro, showlegend = FALSE)+
+#  scale_color_manual(values = c("deepskyblue","salmon")) +
+#  labs(x = "homownership",
+#        y = "poverty", 
+#        title = "Plot F")+
+#  theme_minimal()
+
+#Plot G:
+#ggplot(county) +
+#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
+#  scale_color_manual(values = c("deepskyblue","salmon")) +
+#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue", showlegend = FALSE)+
+#  labs(x = "homownership",
+#        y = "poverty", 
+#        title = "Plot H")+
+#  theme_minimal()
+
+
+#Plot H:
+#ggplot(county) +
+#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
+#  scale_color_manual(values = c("deepskyblue","salmon")) +
+#  labs(x = "homownership",
+#        y = "poverty", 
+#        title = "Plot H")+
+#  theme_minimal()
+
+
+
 
 
 ```
@@ -240,9 +323,8 @@ knitr::opts_chunk$set(
  credit <- read_csv("data/credit.csv")
 # make the comparison plot
  credit |>
-   #group_by (married, student)|>
-   #filter(student %in% c("Student: No",
-                         #"Student: Yes" |>
+   mutate (student = if_else(student == "No","student: No", "student: Yes"))|>
+   mutate(married = if_else(married == "No", "married: No", "married: Yes"))|>
    ggplot(aes(x = income, 
               y = balance, 
               color = student,
@@ -258,9 +340,34 @@ knitr::opts_chunk$set(
         caption = "R Programming 101: Advanced ggplot - using facets")+
    theme_bw()
   
+# a. The relationship between income and credit card balance appears to be a positive relationship across all categories: married/ not married/ student/ not student. As income increases, credit card balance also increases.
+ 
+# b. Whether someone is married or a student Unmarried people (in general) seem to have lower salaries than married people, with married people who are not students have both the highest salaries and the highest credit card balance.
+ 
+ # c. 
+ # Updated comparison plot
+ credit |>
+   mutate(
+     credit_utilization = ((balance/limit)*100)
+   ) |>
+   mutate (student = if_else(student == "No","student: No", "student: Yes"))|>
+   mutate(married = if_else(married == "No", "married: No", "married: Yes"))|>
+   ggplot(aes(x = income, 
+              y = credit_utilization, 
+              color = student,
+              shape = student))+
+   geom_point(size = 2, alpha = 0.4, show.legend = FALSE)+
+   geom_smooth(method = "lm", se = FALSE, size = 0.8)+
+  #scale_y_continuous(labels = label_dollar(big.mark = ",")) +
+  #scale_x_continuous(labels = label_dollar(suffix = "K")) +
+   facet_grid(student~married)+
+   scale_color_manual(values = c("blue","red")) +
+   labs(x = "Income",
+        y = "Credit card balance", 
+        caption = "R Programming 101: Advanced ggplot - using facets")+
+   theme_bw()
 
- 
- 
+ # d. Based on the plot from part (c) we now see that when we examine the relationship between Income and credit utilizaiton, there is a negative relationship (if the student is not married) or a slope of zero if the student is married. When compared to non-students, the relationship between income and credit utilizaiton is positive. 
 ```
 
 ## 5 - Napoleon’s march.
