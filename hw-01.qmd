@@ -62,6 +62,7 @@ accidents_wrangle |>
   ggplot(aes(time,fill = severity))+
   geom_density(alpha = 0.5)+
   theme_light()+
+  #I finally figured out facets after completing question 4 on this homework but could not solve the label issue.
   facet_grid(day_week~.)+
   scale_fill_manual(values = c("purple","deepskyblue3","yellow")) +
    labs(
@@ -335,7 +336,7 @@ knitr::opts_chunk$set(
    scale_color_manual(values = c("blue","red")) +
    labs(x = "Income",
         y = "Credit card balance", 
-        caption = "R Programming 101: Advanced ggplot - using facets")+
+        caption = "Source: R Programming 101: Advanced ggplot - using facets (2023) https://www.youtube.com/watch?v=sxknFa1rprY")+
    theme_bw()
   
 # a. The relationship between income and credit card balance appears to be a positive relationship across all categories: married/ not married/ student/ not student. As income increases, credit card balance also increases.
@@ -362,7 +363,7 @@ knitr::opts_chunk$set(
    scale_color_manual(values = c("blue","red")) +
    labs(x = "Income",
         y = "Credit card balance", 
-        caption = "R Programming 101: Advanced ggplot - using facets")+
+        caption = "Source: R Programming 101: Advanced ggplot - using facets (2023) https://www.youtube.com/watch?v=sxknFa1rprY")+
    theme_bw()
 
  # d. Based on the plot from part (c) we now see that when we examine the relationship between Income and credit utilizaiton, there is a negative relationship (if the student is not married) or a slope of zero if the student is married. When compared to non-students, the relationship between income and credit utilizaiton is positive. 
@@ -371,7 +372,53 @@ knitr::opts_chunk$set(
 ## 5 - Napoleon’s march.
 
 ```{r Napoleons march_Question-5}
-#read_rds(napoleon)
+#load dataset
+napoleon <- readRDS("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/napoleon.rds")
 
+#Troop data
+    data(Minard.troops, package="HistData")
+    str(Minard.troops)
+#Cities Data
+    data(Minard.cities, package="HistData")
+    str(Minard.cities)
+#Temperature data
+    data(Minard.temp, package="HistData")
+    str(Minard.temp)
+
+#load libraries
+library(tidyverse)
+library(lubridate)
+library(ggmap)
+library(ggrepel)
+library(gridExtra)
+library(pander)
+library(dplyr)
+
+
+#start the basic ggplot
+ggplot(Minard.troops, aes(x = long, y = lat, group = group)) +
+  geom_path(aes(size = survivors, color = direction, group = group), lineend = "round")+
+  scale_color_manual("direction", values = c("skyblue3", "salmon3"),
+                     labels = c("Advance", "Retreat"))+
+  theme_linedraw()+
+  theme(
+    legend.position = c(0.9, 0.15),
+    legend.key.height = unit(0.01, 'cm'),
+    legend.text=element_text(size=rel(0.7)),
+    legend.box.background = element_rect(fill = "white",
+                                         color = "white"))+
+   labs(x = "Longitude",
+        y = "Latitude", 
+        caption = "Source: GitHub shakir-flash (2023) https://github.com/shakir-flash/Napoleons-March-Minard-Visualization\n Michael Friendly (2018) http://euclid.psych.yorku.ca/www/psy6135/tutorials/Minard.html\n Zach Bobbitt (2020) https://www.statology.org/ggplot2-legend-size/")
+  
+# At the bottom of the graphic my first citation was where I was able to upload the data to complete this assignment. 
+#The second citation is where I found clear explanation of the basic steps such as how to apply color based on direction. 
+# I only used code for this exercise that I could clearly explain. 
+#I tried to change the size of the legend and found how to do this using my third citation on here. 
+#I am happy with the location on the lower right hand corner and learned this placement from our class lectures. 
+#After uploading the data, I was able to create an asthetic in ggplot using the Minard.troops organization of the three tables. 
+#The x-axis is the longitude and the y-axis is the latitude and I added labels to explain as such. 
+#I used the geom_path aesthetic to account for the survivor size and values of the colors which I manually chose using the scale_color_manual by the direction variable. 
+#I learned how to manually choose colors from the class lectures. I tried several colors adding a number following the name, before decideing upon these. 
 
 ```
