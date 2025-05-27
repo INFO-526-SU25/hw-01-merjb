@@ -70,7 +70,7 @@ accidents_wrangle |>
     y = "Density",
      title = "Number of accidents throughout the day",
     subtitle = "By day of week and severity",
-    caption = "Source: Road traffic accidents in Edinburgh, 2018,\n R Programming 101: Create a boxplot using R programming with the ggplot package")
+    caption = "Source: Road traffic accidents in Edinburgh, 2018,\n R Programming 101: Create a boxplot using R programming with the ggplot package,\n R Programming 101: Advanced ggplot - using facets (2023) https://www.youtube.com/watch?v=sxknFa1rprY")
 
 ```
 
@@ -196,6 +196,15 @@ nyc_marathon|>
 
 ```{r US counties_Question-3}
 #Source: R/data-county.R
+#install.packages("openintro")
+
+# I was unsuccessful loading the dataset "County" for this Homework 01 question 3 but continued to try and with the correct packages, was successful.
+
+# Load libraries
+library(tidyverse)
+library(here)
+library(countdown)
+library(openintro)
 
 #a.The following code [below] does not make sense for the median of the boxplots. If we plotted on the x-axis, the median education on top of the boxplot of the smoking ban, by the median household income on the y-axis,  this would not make sense for the smoking compared to the population as depicted in the boxplot.
 #ggplot(county) +
@@ -207,83 +216,124 @@ nyc_marathon|>
 
 #c. 
 #Plot A: 
-#ggplot(county) +
- # geom_point(aes(x = homownership, y = poverty))
-#  scale_color_manual(values = c("black")) +
-#  labs(x = "homeownership",
-#        y = "poverty", 
-#        title = "Plot A")+
-#  theme_minimal()
+county %>% 
+   drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot() +
+  geom_point(aes(x = homeownership, y = poverty))+
+  scale_color_manual(values = c("black")) +
+  labs(x = "homeownership",
+        y = "poverty", 
+        title = "Plot A")+
+  theme_minimal()
 
 #Plot B:
-#ggplot(county) +
-# geom_point(aes(x = homownership, y = poverty))
-#  scale_color_manual(values = c("black")) +
-#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue")+
-#  labs(x = "homeownership",
-#        y = "poverty", 
-#        title = "Plot B")+
-#  theme_minimal()
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership,
+           y = poverty)) +
+  geom_point()+
+  geom_smooth(se = FALSE, size = 0.8, color = "blue")+
+  scale_color_manual(values = c("black")) +
+  labs(x = "homeownership",
+        y = "poverty", 
+        title = "Plot B")+
+  theme_minimal()
 
 #Plot C:
-#ggplot(county) +
-# geom_point(aes(x = homownership, y = poverty))
-#  scale_color_manual(values = c("black")) +
-#  geom_smooth(method = "mean", se = FALSE, size = 0.8, color = "green", line = metro)+
-#  labs(x = "homeownership",
-#        y = "poverty", 
-#        title = "Plot B")+
-#  theme_minimal()
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership, 
+           y = poverty,
+           color = metro,
+           line = metro))+
+  geom_point()+
+  scale_color_manual(values = c("black", "black")) +
+  geom_smooth(se = FALSE, size = 0.8, color = "green")+
+  labs(x = "homeownership",
+        y = "poverty", 
+        title = "Plot C")+
+  theme_minimal()
 
 #Plot D:
-#ggplot(county) +
-# geom_point(aes(x = homownership, y = poverty))
-#  scale_color_manual(values = c("black")) +
-#  geom_smooth(method = "mean", se = FALSE, size = 0.8, color = "blue", line = metro)+
-#  labs(x = "homeownership",
-#        y = "poverty", 
-#        title = "Plot B")+
-#  theme_minimal()
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership, 
+           y = poverty,
+           color = metro,
+           line = metro))+
+  geom_point()+
+  scale_color_manual(values = c("black", "black")) +
+  geom_smooth(se = FALSE, size = 0.8, color = "blue")+
+  labs(x = "homeownership",
+        y = "poverty", 
+        title = "Plot D")+
+  theme_minimal()
 
 #Plot E:
-#ggplot(county) +
-#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
-#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue", linetype = metro)+
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership,
+           y = poverty,
+           color = metro,
+           linetype = metro,
+           showlegend = TRUE)) +
+  geom_point(aes(x = homeownership, y = poverty, color = metro, size = 2))+
+  geom_smooth(se = FALSE, size = 0.8, color = "blue")+
 #  scale_color_manual(values = c("deepskyblue","salmon")) +
-#  labs(x = "homownership",
-#        y = "poverty", 
-#        title = "Plot F")+
-#  theme_minimal()
+  labs(x = "homownership",
+        y = "poverty", 
+        title = "Plot E")+
+  theme_minimal()
 
 #Plot F:
-#ggplot(county) +
-#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
-#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = metro, showlegend = FALSE)+
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership,
+           y = poverty,
+           color = metro)) +
+  geom_point(size = 2)+
+  geom_smooth(se = FALSE, size = 0.8, showlegend = FALSE)+
 #  scale_color_manual(values = c("deepskyblue","salmon")) +
-#  labs(x = "homownership",
-#        y = "poverty", 
-#        title = "Plot F")+
-#  theme_minimal()
+  labs(x = "homownership",
+        y = "poverty", 
+        title = "Plot F")+
+  theme_minimal()
 
 #Plot G:
-#ggplot(county) +
-#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
-#  scale_color_manual(values = c("deepskyblue","salmon")) +
-#  geom_smooth(method = "lm", se = FALSE, size = 0.8, color = "blue", showlegend = FALSE)+
-#  labs(x = "homownership",
-#        y = "poverty", 
-#        title = "Plot H")+
-#  theme_minimal()
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership,
+           y = poverty,
+           color = metro)) +
+  geom_point(size = 2)+
+  geom_smooth(se = FALSE, size = 0.8, color = "blue", showlegend = FALSE)+
+ # scale_color_manual(values = c("deepskyblue","salmon")) +
+  labs(x = "homownership",
+        y = "poverty", 
+        title = "Plot G")+
+  theme_minimal()
 
 
 #Plot H:
-#ggplot(county) +
-#  geom_point(aes(x = homownership, y = poverty, color = metro, size = 2, alpha = 1))+
-#  scale_color_manual(values = c("deepskyblue","salmon")) +
-#  labs(x = "homownership",
-#        y = "poverty", 
-#        title = "Plot H")+
-#  theme_minimal()
+county %>% 
+  drop_na(homeownership) %>% 
+  drop_na(poverty)|>
+ggplot(aes(x = homeownership,
+           y = poverty,
+           color = metro)) +
+  geom_point(size = 2, showlegend = FALSE)+
+  #scale_color_manual(values = c("salmon","deepskyblue")) +
+  labs(x = "homownership",
+        y = "poverty", 
+        title = "Plot H")+
+  theme_minimal()
 
 
 ```
