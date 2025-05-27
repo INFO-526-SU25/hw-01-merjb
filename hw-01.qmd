@@ -16,17 +16,15 @@ toc: true
 ```{r setup}
 if (!require("pacman")) 
   install.packages("pacman")
+pacman::p_load(here)
 
+#use this format for loading the datasets:
+#XXX<-read_csv(here("data", "XXXX.csv"))
 # use this line for installing/loading
 # pacman::p_load() 
 
 devtools::install_github("tidyverse/dsbox")
-```
-
-## 1 - Road traffic accidents in Edinburgh
-
-```{r Road traffic accidents in Edinburgh_Question-1}
-# load packages
+#libraries 
 library(tidyverse)
 library(here)
 library(countdown)
@@ -46,8 +44,36 @@ knitr::opts_chunk$set(
   dpi = 300             # higher dpi, sharper image
 )
 
-#load the dataset
-accidents <- read_csv("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/accidents.csv")
+```
+
+## 1 - Road traffic accidents in Edinburgh
+
+```{r Road traffic accidents in Edinburgh_Question-1}
+# load packages
+if (!require("pacman")) 
+  install.packages("pacman")
+pacman::p_load(here)
+accidents <-read_csv(here("data", "accidents.csv"))
+
+#libraries 
+library(tidyverse)
+library(here)
+library(countdown)
+
+# set theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set width of code output
+options(width = 65)
+
+# set figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 7,        # 7" width
+  fig.asp = 0.618,      # the golden ratio
+  fig.retina = 3,       # dpi multiplier for displaying HTML output on retina
+  fig.align = "center", # center align figures
+  dpi = 300             # higher dpi, sharper image
+)
 
 #mutate day_of_the_week to weekend/ weekday: 
 #NOTE: none of these mutates worked as hoped for
@@ -64,6 +90,8 @@ accidents_wrangle |>
   theme_light()+
   #I finally figured out facets after completing question 4 on this homework but could not solve the label issue.
   facet_grid(day_week~.)+
+#possible solution for titles:
+  #  facet_wrap(~ day_week, scales = "free_y", ncol = 1, nrow = 2)
   scale_fill_manual(values = c("purple","deepskyblue3","yellow")) +
    labs(
     x = "Time of day",
@@ -78,6 +106,12 @@ accidents_wrangle |>
 
 ```{r NYC Marathon winners_Question-2}
 # load packages
+if (!require("pacman")) 
+  install.packages("pacman")
+pacman::p_load(here)
+data<-read_csv(here("data", "nyc_marathon.csv"))
+
+#load libraries:
 library(tidyverse)
 library(here)
 library(countdown)
@@ -197,6 +231,11 @@ nyc_marathon|>
 ```{r US counties_Question-3}
 #Source: R/data-county.R
 #install.packages("openintro")
+
+if (!require("pacman")) 
+  install.packages("pacman")
+pacman::p_load(openintro)
+
 
 # I was unsuccessful loading the dataset "County" for this Homework 01 question 3 but continued to try and with the correct packages, was successful.
 
@@ -344,9 +383,11 @@ ggplot(aes(x = homeownership,
 #setup
 if (!require("pacman")) 
   install.packages("pacman")
+pacman::p_load(here)
 
-# use this line for installing/loading
-#pacman::p_load() 
+# load the dataset (alternate version)
+credit <- read_csv("data/credit.csv")
+ 
 #load the library 
 library(readr)
 library(tidyverse)
@@ -368,8 +409,7 @@ knitr::opts_chunk$set(
   dpi = 300             # higher dpi, sharper image
 )
 
-# load the dataset
- credit <- read_csv("data/credit.csv")
+
 # make the comparison plot
  credit |>
    mutate (student = if_else(student == "No","student: No", "student: Yes"))|>
@@ -423,7 +463,11 @@ knitr::opts_chunk$set(
 
 ```{r Napoleons march_Question-5}
 #load dataset
-napoleon <- readRDS("~/Documents/Meredith Documents/1 Mer docs/1 PhD/5 SPRING 2025/INFO 526 DATA VISUALIZATION/HOMEWORK/hw_01_merjb/data/napoleon.rds")
+# load the dataset
+if (!require("pacman")) 
+  install.packages("pacman")
+pacman::p_load(here)
+data<-readRDS(here("data", "napoleon.rds"))
 
 #Troop data
     data(Minard.troops, package="HistData")
